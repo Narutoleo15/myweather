@@ -16,24 +16,18 @@ function Home() {
   const [weather, setWeather] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`
+  const getWeather = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    axios.get(url).then((result) => {
+      setWeather(result.data);
+      console.log(result.data);
+    });
+    setCity(city);
+    setIsLoading(false);
+  }
 
-    async function getWeather() {
-      setIsLoading(true);
-      try {
-        const result = await axios(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`
-        );
-        setWeather(result.data);
-      } catch (error) {
-        // handle error here
-        console.error('i Logged');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    getWeather();
-  }, [city]);
 
 
   let weatherIcon;
@@ -50,18 +44,11 @@ function Home() {
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setCity(city);
-    console.log(city)
-  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <Image className='object-cover z-[-2]' src='https://images.unsplash.com/photo-1536152470836-b943b246224c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=738&q=80' fill alt='yoda' />
-      <form
-        onSubmit={handleSubmit}
-      >
+      <form>
         <input
           className="border rounded py-2 px-3"
           type="text"
@@ -71,6 +58,7 @@ function Home() {
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           type="submit"
+          onClick={getWeather}
         >
           Get Weather
         </button>
