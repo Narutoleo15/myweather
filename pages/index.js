@@ -1,3 +1,4 @@
+
 import Head from 'next/head'
 import Image from 'next/image'
 import { FaSun, FaCloudSun, FaCloudRain, FaSnowflake } from 'react-icons/fa';
